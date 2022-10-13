@@ -1,9 +1,5 @@
 -- Database: `trinity`
 --
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `contacts`
 --
 
