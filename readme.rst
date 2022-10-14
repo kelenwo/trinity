@@ -11,4 +11,3 @@ Installation
 *******************
 
 To install:
-* 
