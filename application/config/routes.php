@@ -52,10 +52,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'home';
 $route['admin'] = 'admin/index';
 $route['admin-page'] = 'admin/index';
-$route['admin/prayer-requests'] = 'admin/prayer_requests';
+$route['admin/prayer-requests'] = 'admin/prayerRequests';
 $route['admin/events'] = 'admin/events';
+$route['admin/one-off-donors'] = 'admin/oneOffDonors';
+$route['admin/recurring-donors'] = 'admin/recurringDonors';
+$route['admin/upload'] = 'admin/do_upload';
+
 $route['admin/contacts'] = 'admin/contacts';
+
 $route['admin/media'] = 'admin/media';
+$route['admin/saveMedia'] = 'admin/saveMedia';
+$route['admin/saveEvent'] = 'admin/saveEvent';
+
+$route['send/prayer-request'] = 'home/savePrayer';
+$route['send/message'] = 'home/saveMessage';
+$route['send/donation'] = 'home/saveDonation';
+$route['auth/login'] = 'home/auth';
+
+$route['app/fetchState/(:any)'] = 'home/fetchState/$1';
+
 // $route['admin'] = 'admin/index';
 $route['(:any)'] = 'home/$1/$2';
 $route['404_override'] = '';

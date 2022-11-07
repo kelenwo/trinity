@@ -7,7 +7,6 @@
       	<center><h1 style = "color: blue; font-family: Montserrat Black">Trinity Missionary Fellowship</h1>
         <p style="font-size:20px">Carries the torch of the Good News of Jesus Christ to the world, keeping alive the flame of love and hope in the resurrected Lord Jesus Christ, and in the saving Power of His Love.</center>
     </p> <br>
-    <button type="button" class="btn btn-light btn-outline-primary btn-lg pl-5 pr-5"> Learn More</button>
   </div>
      </div>
      </div>

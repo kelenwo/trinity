@@ -15,6 +15,3 @@ Akwa Ibom State, Nigeria.</h6>
 		</footer>
    </body>
 </html>
-
-<?php
-//unset($_SESSION['flash_errors']);

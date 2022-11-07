@@ -4,11 +4,11 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
    <!-- Page Heading -->
-   <h1 class="h3 mb-2 text-gray-800">Media</h1>
+   <h1 class="h3 mb-2 text-gray-800">Users</h1>
    <!-- DataTales Example -->
    <div class="card shadow mb-4">
       <div class="card-header py-3">
-      <button class="btn btn-success btn-md px-3" data-toggle="modal" data-target="#addMediaModal"><b>Add Media <i class="fa fa-plus"></i></b></button>
+      <button class="btn btn-success btn-md px-3" data-toggle="modal" data-target="#addMediaModal"><b>Add Users <i class="fa fa-plus"></i></b></button>
       </div>
       <div class="card-body">
          <div class="table-responsive">
@@ -17,34 +17,34 @@
                <thead>
                   <tr>
                      <th>#</th>
-                     <th>Title</th>
-                     <th>Type</th>
-                     <th>Url</th>
+                     <th>Name</th>
+                     <th>Phone</th>
+                     <th>Email</th>
+                     <th>Rights</th>
                      <th>Status</th>
-                     <th>Date</th>
                      <th>Actions&nbsp;&nbsp;</th>
                   </tr>
                </thead>
                <tbody>
-                  <?php if(empty($media)): ?>
+                  <?php if(empty($users)): ?>
                   <tr>
                      <td colspan="7">
                         <h4 class="text-center">NO DATA TO DISPLAY</h4>
                      </td>
                   </tr>
                   <?php else: $i = 1;?>
-                  <?php  foreach($media as $req): ?>
+                  <?php  foreach($users as $req): ?>
                   <tr>
                      <td><?= $i++.'.';?>
-                     <td><a href="#" onclick='showDetails(<?= json_encode($req); ?>)'><?= $req['title']; ?></a></td>
-                     <td class="text-capitalize"><?= $req['type']; ?></td>
-                     <td><a href="<?= $req['url']; ?>" target="_blank"><?= $req['url']; ?></td>
+                     <td class="cursor-hand text-capitalize" onclick='showDetails(<?= json_encode($req); ?>)'><a href="#"><?= $req['first_name'] .' '. $req['last_name']; ?></a></td>
+                     <td onclick='showDetails(<?= json_encode($req); ?>)' class="text-capitalize"><?= $req['phone']; ?></td>
+                     <td onclick='showDetails(<?= json_encode($req); ?>)'><?= $req['email']; ?></td>
+                     <td class="text-capitalize" onclick='showDetails(<?= json_encode($req); ?>)'><?=$req['rights'];?></td>
                      <td class="cursor-hand text-capitalize <?php if($req['status']=='active'){echo 'text-success';}?>" onclick='showDetails(<?= json_encode($req); ?>)'><?php echo $req['status']; ?></td>
-                     <td ><?= date("d F Y", strtotime($req['date']));?></td>
                      <td>
-                        <a class="cursor-hand" href="#" <?php if($req['status']=='active'):?>title="Mark Inactive" onclick="doneItem(<?=$req['id'] ?>,'media','inactive')" <?php elseif($req['status']=='inactive'):?> title="Mark active" onclick="doneItem(<?= $req['id'] ?>,'media','active')"<?php endif;?>><i class="far fa-check-square <?php if($req['status']=='active'){echo 'text-success';} else{echo 'text-danger';}?>"></i></a> |
+                        <a class="cursor-hand" href="#" <?php if($req['status']=='active'):?>title="Disable" onclick="doneItem(<?=$req['id'] ?>,'users','disabled')" <?php elseif($req['status']=='disabled'):?> title="Enable" onclick="doneItem(<?= $req['id'] ?>,'users','active')"<?php endif;?>><i class="far fa-check-square <?php if($req['status']=='active'){echo 'text-success';} else{echo 'text-danger';}?>"></i></a> |
                         <a class="cursor-hand" title="Edit" href="#" onclick='editItem(<?= json_encode($req); ?>)'><i class="fa fa-edit text-success"></i></a> | 
-                        <a class="cursor-hand" title="Delete" onclick="deleteItem('<?= $req['id']; ?>','media')"><i class="fa fa-trash text-danger"></i></a>
+                        <a class="cursor-hand" title="Delete" onclick="deleteItem('<?= $req['id']; ?>','users')"><i class="fa fa-trash text-danger"></i></a>
                      </td>
                   </tr>
                   <?php endforeach;
@@ -60,7 +60,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Media</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -68,29 +68,39 @@
       <div class="modal-body px-5">
         <form id="media">
             <div class="form-group">
-               <label for="title">Title</label>
-               <input type="text" id="title" name="title" class="form-control">
-            </div> 
+               <label for="title">First Name</label>
+               <input type="text" id="first_name" name="first_name" class="form-control">
+            </div>
 
             <div class="form-group">
-               <label for="type">Type</label>
-               <select name="type" class="form-control">
-                  <option value="teaching">Teaching</option>
-                  <option value="service">Service</option>
-                  <option value="outreach">Outreach</option>
+               <label for="title">Last Name</label>
+               <input type="text" id="last_name" name="last_name" class="form-control">
+            </div>  
+
+            <div class="form-group">
+               <label for="rights">Rights</label>
+               <select name="rights" class="form-control">
+                  <option value="admin">Administrator</option>
+                  <option value="user">User</option>
                </select>
             </div>
 
             <div class="form-group">
-               <label for="url">Url</label>
-               <input type="text" id="url" name="url" class="form-control">
+               <label for="url">Email</label>
+               <input type="text" id="email" name="email" class="form-control">
             </div>
+
 
             <div class="form-group">
-               <label for="date">Date</label>
-               <input type="datetime-local" id="date" name="date" class="form-control">
+               <label for="url">Phone Number</label>
+               <input type="text" id="phone" name="phone" class="form-control">
             </div>
 
+
+            <div class="form-group">
+               <label for="url">Password</label>
+               <input type="password" id="password" name="password" class="form-control">
+            </div>
 
             <div class="form-group">
                <button type="button" class="btn btn-success px-4" id="submit">Submit <i class="fa fa-cog fa-spin loading"></i></button>
@@ -109,36 +119,49 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Media</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body px-5">
         <form id="editMedia">
-            <div class="form-group">
-               <label for="title">Title</label>
-               <input type="text" id="titleEdit" name="title" class="form-control">
-            </div> 
+        <div class="form-group">
+               <label for="title">First Name</label>
+               <input type="text" id="firstEdit" name="first_name" class="form-control">
+            </div>
 
             <div class="form-group">
-               <label for="type">Type</label>
-               <select name="type" class="form-control">
-                  <option value="teaching">Teaching</option>
-                  <option value="service">Service</option>
-                  <option value="outreach">Outreach</option>
+               <label for="title">Last Name</label>
+               <input type="text" id="lastEdit" name="last_name" class="form-control">
+            </div>  
+
+            <div class="form-group">
+               <label for="type">Rights</label>
+               <select name="rights" class="form-control">
+                  <option value="admin">Administrator</option>
+                  <option value="user">User</option>
                </select>
             </div>
 
             <div class="form-group">
-               <label for="url">Url</label>
-               <input type="text" id="urlEdit" name="url" class="form-control">
+               <label for="url">Email</label>
+               <input type="text" id="emailEdit" name="email" class="form-control">
             </div>
 
+
             <div class="form-group">
-               <label for="date">Date</label>
-               <input type="datetime-local" id="dateEdit" name="date" class="form-control">
+               <label for="url">Phone Number</label>
+               <input type="text" id="phoneEdit" name="phone" class="form-control">
             </div>
+
+
+            <div class="form-group">
+               <label for="url">Password</label><br>
+               <small>Leave blank if you don't intend to change password</small><br>
+               <input type="password" id="password" name="password" class="form-control">
+            </div>
+
 
             <div class="form-group">
                <label for="location">Status</label><br>
@@ -186,27 +209,42 @@
       <div class="col-sm-11 col-md-11 card  bg-light ml-4">
          <div class="card-body">
             <div class="row">
-               <div class="col-sm-12 col-md-12 mt-3">
+               <div class="col-sm-6 col-md-6 mt-3">
                   <div class="text-sm text-primary ml-3 text-capitalize">
-                     <span class="text-success">Title:</span>
+                     <span class="text-success">First Name:</span>
                      <br>
-                     <h6 id="titleView"></h6>
+                     <h6 id="firstView"></h6>
                   </div>
                   <div class="ml-3">
                      <div class="text-sm text-primary">
-                        <span class="text-success">Url:</span>
+                        <span class="text-success">Email:</span>
                         <br>
-                        <h6 id="urlView"></h6>
+                        <h6 id="emailView"></h6>
                      </div>
                      <div class="text-sm text-primary text-capitalize">
-                        <span class="text-success">Type:</span>
+                        <span class="text-success">Phone Number:</span>
                         <br>
-                        <h6 id="typeView"></h6>
+                        <h6 id="phoneView"></h6>
                      </div>
                      <div class="text-sm text-primary text-capitalize">
                         <span class="text-success">Date:</span>
                         <br>
                         <h6 id="dateView"></h6>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="col-sm-6 col-md-6 mt-3">
+                  <div class="text-sm text-primary ml-3 text-capitalize">
+                     <span class="text-success">Last Name:</span>
+                     <br>
+                     <h6 id="lastView"></h6>
+                  </div>
+                  <div class="ml-3">
+                     <div class="text-sm text-primary">
+                        <span class="text-success">Rights:</span>
+                        <br>
+                        <h6 id="rightsView"></h6>
                      </div>
                      <div class="text-sm text-primary text-capitalize">
                         <span class="text-success">Status:</span>
@@ -236,7 +274,7 @@
       $('#submit').on('click',function() {
          $('.loading').show();
          $.ajax({
-            url:'<?php echo base_url()."admin/saveMedia";?>',
+            url:'<?php echo base_url()."admin/saveUser";?>',
             type: "POST",
             error: function(){
                alert('An error occured, please try again');
@@ -247,7 +285,7 @@
             success:function(data) {
                $('.loading').hide();
                if(data='true') {
-               alert('Media has been saved successfully');
+               alert('User has been saved successfully');
                window.location.href = window.location.href;
                } else {
                   alert(data);
@@ -261,7 +299,7 @@
          $('#statusEdit').val('active');
         } 
         else {
-         $('#statusEdit').val('inactive');
+         $('#statusEdit').val('disabled');
         }
       });
 
@@ -269,7 +307,7 @@
          $('.loading').show();
 
          $.ajax({
-            url:'<?php echo base_url()."admin/updateMedia";?>',
+            url:'<?php echo base_url()."admin/updateUser";?>',
             type: "POST",
             error: function(){
                alert('An error occured, please try again');
@@ -279,8 +317,8 @@
             data: $('#editMedia').serialize(),
             success:function(data) {
                $('.loading').hide();
-               if(data=='true') {
-               alert('Event has been updated successfully');
+               if(data=true) {
+               alert('User has been updated successfully');
                window.location.href = '';
                } else {
                   alert(data);
@@ -293,21 +331,25 @@
 
    function showDetails(value) {
       $('#editBtn').attr('onclick','editItem('+JSON.stringify(value)+')');
-      $('#deleteBtn').attr('onclick','deleteItem('+value['id']+',"media")');
+      $('#deleteBtn').attr('onclick','deleteItem('+value['id']+',"users")');
 
-      $('#titleView').text(value['title']);
-      $('#urlView').text(value['url']);
+      $('#firstView').text(value['first_name']);
+      $('#lastView').text(value['   last_name']);
+      $('#emailView').text(value['email']);
       $('#dateView').text(value['date']);
-      $('#typeView').text(value['type']);
+      $('#phoneView').text(value['phone']);
+      $('#rightsView').text(value['rights']);
       $('#statusView').text(value['status']);
       $('#showViewModal').trigger('click');
 
    }
 
    function editItem(value) {
-      $('#titleEdit').val(value['title']);
-      $('#urlEdit').val(value['url']);
-      $('#typeEdit').val(value['type']);
+      $('#firstEdit').val(value['first_name']);
+      $('#lastEdit').val(value['last_name']);
+      $('#emailEdit').val(value['email']);
+      $('#phoneEdit').val(value['phone']);
+      $('#rightsEdit').val(value['rights']);
       $('#statusEdit').val(value['status']);
       $('#dateEdit').val(value['date']);
       $('#idEdit').val(value['id']);

@@ -22,7 +22,7 @@
                     </div>
                     <div class="col ml-2">
                       <div class="text-sm font-weight-bold text-secondary text-uppercase mb-1">Pending Prayer Requests</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $prayer_requests ?></div>
                     </div>
 
                   </div>
@@ -42,7 +42,7 @@
                     </div>
                     <div class="col ml-2">
                       <div class="text-sm font-weight-bold text-info text-uppercase mb-1">Pending Contacts</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">15</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $contacts ?></div>
                     </div>
 
                   </div>
@@ -62,7 +62,7 @@
                     </div>
                     <div class="col ml-2">
                       <div class="text-sm font-weight-bold text-primary text-uppercase mb-1">Pending One-off Donations</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $oneoff_donations ?></div>
                     </div>
 
                   </div>
@@ -82,7 +82,7 @@
                     </div>
                     <div class="col ml-2">
                       <div class="text-sm font-weight-bold text-warning text-uppercase mb-1">Pending recurring Donations</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">8</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $recurring_donations ?></div>
                     </div>
 
                   </div>
@@ -103,14 +103,23 @@
                   <h6 class="m-0 font-weight-bold text-primary">Upcoming Events</h6>
                 </div>
                 <!-- Card Body -->
+                <?php if(empty($events)): ?>
+                  <div class="card-body">
+                  <h5 class="m-0 ml-3 text-primary text-sm">
+                   No Upcoming Event
+                  </h5>
+                </div>
+                <?php else: ?>
+                <?php foreach($events as $req): ?>
                 <div class="card-body">
                   <h5 class="m-0 ml-3 text-success text-sm">
-                    Encounter Service
+                    <?= $req['title'] ?>
                   </h5>
                   <span class="m-0 ml-3 text-primary text-sm">
-                    10:30am, 29th September, 2022.
+                  <?php echo date("h:ia - d F Y", strtotime($req['date']));?>
                   </span>
                 </div>
+                <?php endforeach; endif;?>
               </div>
             </div>
           </div>

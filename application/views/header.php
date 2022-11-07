@@ -2,7 +2,7 @@
 <html>
 
    <head>
-      <title>Trinity Fellowship</title>
+      <title>Trinity Fellowship - <?=$title?></title>
       <meta charset="utf-8">
       <meta name = "viewport" content = "width = device-width, initial-scale = 1.0">
       <link rel="icon" href="<?= base_url() ?>public/pictures/logo/logo.png">
@@ -34,7 +34,7 @@
         </button>
 
         <div class = "collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
+          <ul class="navbar-nav ml-auto f-montserrat">
             <li class = "nav-item active">
               <a href="<?= base_url() ?>" class="nav-link">Home</a>
             </li>

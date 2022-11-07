@@ -1,19 +1,19 @@
 <style>
    .modal { overflow-y: auto !important}
 </style>
+<!-- Page level custom scripts -->
 <!-- Begin Page Content -->
 <div class="container-fluid">
    <!-- Page Heading -->
-   <h1 class="h3 mb-2 text-gray-800">Prayer Requests</h1>
+   <h1 class="h3 mb-2 text-gray-800">Monthly Donations</h1>
    <!-- DataTales Example -->
    <div class="card shadow mb-4">
       <div class="card-header py-3">
-      <a class="btn btn-success btn-md px-3" href="<?=base_url()?>prayer_line" target="_blank"><b>Add Prayer Request <i class="fa fa-plus"></i></b></a>
-
+      <a class="btn btn-success btn-md px-3" href="<?=base_url()?>donate" target="_blank"><b>Add Donation <i class="fa fa-plus"></i></b></a>
       </div>
-      <div class="card-body">
          <div class="table-responsive">
             <!-- View contracts Start -->
+            <div class="card-body">
             <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
                <thead>
                   <tr>
@@ -21,6 +21,7 @@
                      <th>Name</th>
                      <th>Email</th>
                      <th>Country</th>
+                     <th>Amount</th>
                      <th>Date</th>
                      <th>Status</th>
                      <th>Actions</th>
@@ -28,25 +29,32 @@
                   </tr>
                </thead>
                <tbody>
-                  <?php if(empty($prayer_requests)): ?>
+                  <?php if(empty($donors)): ?>
                   <tr>
-                     <td colspan="7">
+                     <td colspan="8">
                         <h4 class="text-center">NO DATA TO DISPLAY</h4>
                      </td>
                   </tr>
                   <?php else: $i = 1;?>
-                  <?php  foreach($prayer_requests as $req): ?>
+                  <?php  foreach($donors as $req): ?>
                   <tr>
                      <td><?php echo $i++.'.';?>
                      <td class="cursor-hand text-capitalize" onclick='showDetails(<?= json_encode($req); ?>)'><?php echo $req['first_name'] .' '. $req['last_name']; ?></td>
                      <td class="cursor-hand" onclick='showDetails(<?= json_encode($req); ?>)'><?php echo $req['email']; ?></td>
                      <td class="cursor-hand" onclick='showDetails(<?= json_encode($req); ?>)'><?php echo $req['country']; ?></td>
-                     <td class="cursor-hand" onclick='showDetails(<?= json_encode($req); ?>)'><?php echo date("d F Y", strtotime($req['date']));?></td>
-                     <td class="cursor-hand text-capitalize <?php if($req['status']=='done'){echo 'text-success';} elseif($req['status']=='pending'){echo 'text-warning';}?>" onclick='showDetails(<?= json_encode($req); ?>)'><?php echo $req['status']; ?></td>
-                     <td><button class="btn" href="#" title="Mark as done" onclick="doneItem('<?= $req['id']; ?>','prayer_requests','done')" <?php if($req['status']=='done'){echo 'disabled';}?>><i class="far fa-check-square text-success"></i></button> | 
-                        <a class="cursor-hand" title="Delete" onclick="deleteItem('<?= $req['id']; ?>','prayer_requests')"><i class="fa fa-trash text-danger"></i></a>
+                     <td class="cursor-hand" onclick='showDetails(<?= json_encode($req); ?>)' ><?php echo $req['amount'];?></td>
+                     <td class="cursor-hand" onclick='showDetails(<?= json_encode($req); ?>)' ><?php echo date("d F Y", strtotime($req['date']));?></td>
+                     <td class="cursor-hand text-capitalize" onclick='showDetails(<?= json_encode($req); ?>)'><?php echo $req['status']; ?></td>
+
+                     <td>
+                        <!-- <a class="cursor-hand" href="#" <?php if($req['status']=='active'):?>title="Mark Inactive" onclick="doneItem(<?=$req['id'] ?>,'donors','inactive')" <?php elseif($req['status']=='inactive' || $req['status']=='pending'):?> title="Mark active" onclick="doneItem(<?= $req['id'] ?>,'donors','active')"<?php endif;?>><i class="far fa-check-square <?php if($req['status']=='active'){echo 'text-success';} else{echo 'text-danger';}?>"></i></a> | -->
+
+                        <a class="cursor-hand" title="Delete" onclick="deleteItem('<?= $req['id']; ?>','donors')"><i class="fa fa-trash text-danger"></i></a>
+
                      </td>
+                     <!-- delete contract -->
                   </tr>
+                  <!-- delete contract end -->
                   <?php endforeach;
                      endif;?>
                </tbody>
@@ -66,7 +74,7 @@
 <a class="scroll-to-top rounded" href="#page-top">
 <i class="fas fa-angle-up"></i>
 </a>
-<!-- Modal -->
+</body><!-- Modal -->
 <button class="btn btn-success btn-md px-3 d-none" id="showViewModal" data-toggle="modal" data-target="#viewModal"><b>Add Event <i class="fa fa-plus"></i></b></button>
 
 <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="addEventLabel" aria-hidden="true">
@@ -107,13 +115,7 @@
                         <span class="text-success">Country:</span>
                         <br>
                         <h6 id="countryView"></h6>
-                     </div>
-                     <div class="text-sm text-primary">
-                        <span class="text-success">Phone Number:</span>
-                        <br>
-                        <h6 id="phoneView"></h6>
-                     </div>
-
+                     </div>                     
                      <div class="text-sm text-primary text-capitalize">
                         <span class="text-success">Date:</span>
                         <br>
@@ -129,7 +131,12 @@
                      <h6 id="lastnameView"></h6>
                   </div>
                   <div class="ml-3">
-                  <div class="text-sm text-primary text-capitalize">
+                     <div class="text-sm text-primary">
+                        <span class="text-success">Phone Number:</span>
+                        <br>
+                        <h6 id="phoneView"></h6>
+                     </div>
+                     <div class="text-sm text-primary text-capitalize">
                         <span class="text-success">State:</span>
                         <br>
                         <h6 id="stateView"></h6>
@@ -139,35 +146,71 @@
                         <br>
                         <h6 id="statusView"></h6>
                   </div>
-                  <div class="text-sm text-primary text-capitalize">
-                     <span class="text-success">Image:</span>
-                     <br>
-                     <img class="img-fluid" id="view-image" src="" style="height:auto !important" />
                   </div>
-                  <br>
-               </div>
-                  </div>
-               </div>
-
-               <div class="col-sm-12 col-md-12 mt-1">
-                  <!-- <div class="text-sm text-primary text-capitalize">
-                     <span class="text-success">Title:</span>
-                     <br>
-                     <h6 id="titleView"></h6>
-                  </div> -->
-                     <div class="text-sm text-primary">
-                        <span class="text-success">Message:</span>
-                        <br>
-                        <h6 id="messageView"></h6>
-                     </div>
                </div>
             </div>
          </div>
       </div>
-      <div class="form-group text-center mt-3">
-            <button class="btn pl-5 pr-5 btn-success" type="button" id="doneBtn"><i class="far fa-check-circle"></i> Mark done</button>
-            <button class="btn pl-5 pr-5 btn-danger" type="button" id="deleteBtn" data-dismiss="modal"><i class="fas fa-trash"></i> Delete</button>
-            <button class="btn pl-5 pr-5 btn-info" type="button" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i> Close</button>
+
+            <!-- Donation Information start-->
+            <div class="col-md-12 mt-2">
+         <span class="fa-stack text-warning fa-2x" style="font-size: 0.9em !important;">
+         <i class="fas fa-circle fa-stack-2x"></i>
+         <i class="far fa-money-bill-alt fa-stack-1x fa-inverse"></i>
+         </span> 
+         <h5 class="inline">Donation Information</h5>
+      </div>
+      <div class="col-sm-11 col-md-11 card  bg-light ml-4">
+         <div class="card-body">
+            <div class="row">
+               <div class="col-sm-6 col-md-6 mt-3">
+                  <div class="text-sm text-primary ml-3 text-capitalize">
+                     <span class="text-success">Amount:</span>
+                     <br>
+                     <h6 id="amountView"></h6>
+                  </div>
+                  <div class="ml-3">
+                     <div class="text-sm text-primary text-capitalize">
+                        <span class="text-success">Next Gift:</span>
+                        <br>
+                        <h6 id="nextGiftView"></h6>
+                     </div>                     
+                     <div class="text-sm text-primary text-capitalize">
+                        <span class="text-success">Date Cancelled:</span>
+                        <br>
+                        <h6 id="dateCancelledView"></h6>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="col-sm-6 col-md-6 mt-3">
+                  <div class="text-sm text-primary ml-3 text-capitalize">
+                     <span class="text-success">Date Paid:</span>
+                     <br>
+                     <h6 id="datePaidView"></h6>
+                  </div>
+                  <div class="ml-3">
+                     <div class="text-sm text-primary">
+                        <span class="text-success">Rounds:</span>
+                        <br>
+                        <h6 id="roundsView"></h6>
+                     </div>
+                     <div class="text-sm text-primary text-capitalize">
+                        <span class="text-success">Type:</span>
+                        <br>
+                        <h6 id="typeView"></h6>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <div class="form-group text-center mt-3" id="bttn">
+            <button class="btn px-3" id="paidBtn"> Mark Paid</button>
+            <button class="btn px-3 btn-success" id="doneBtn">&nbsp;<span id="cancelB"> Cancel</span></button>
+            <button class="btn px-3 btn-danger" type="button" id="deleteBtn"><i class="fas fa-trash"></i> Delete</button>
+            <button class="btn px-3 btn-info cl" type="button" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i> Close</button>
          </div>
       <!-- General Information end -->
       </div>
@@ -175,18 +218,34 @@
   </div>
 </div>
 <script>
+
 function showDetails(value) {
-   if(value['status']=='done') {
-      $('#doneBtn').attr('disabled','disabled');
-   }  else {
-      $('#doneBtn').removeAttr('disabled');
+
+   $('#deleteBtn').attr('onclick','deleteItem('+value['id']+',"media")');
+
+   if(value['status']=='cancelled') {
+      $('#paidBtn').addClass('btn-success');
+      $('#paidBtn').attr('disabled','disabled');
+      $('#cancelB').text('Resume giving')
+      $('#doneBtn').attr('onclick','doneItem('+value['id']+',"donors","pending")');
+
 
    }
-   $('#doneBtn').attr('onclick','doneItem('+value['id']+',"prayer_requests","done")');
-   $('#deleteBtn').attr('onclick','deleteItem('+value['id']+',"prayer_requests")');
+   else if(value['status']=='pending') {
+      $('#paidBtn').addClass('btn-warning');
+      $('#doneBtn').attr('onclick','doneItem('+value['id']+',"donors","cancelled")');
+      $('#paidBtn').attr('onclick','doneItem('+value['id']+',"donors","paid")');
 
-      // $('#titleView').text(value['title']);
-      $('#messageView').text(value['message']);
+   }
+   else if(value['status']=='paid') {
+      $('#paidBtn').attr('disabled','disabled');
+      $('#paidBtn').addClass('btn-success');
+      $('#doneBtn').attr('onclick','doneItem('+value['id']+',"donors","cancelled")');
+   } else {
+      $('#paidBtn').addClass('btn-warning');
+   }
+      $('#titleView').text(value['title']);
+      $('#amountView').text(value['amount']);
       $('#dateView').text(value['date']);
       $('#emailView').text(value['email']);
       $('#statusView').text(value['status']);
@@ -195,10 +254,15 @@ function showDetails(value) {
       $('#phoneView').text(value['phone']);
       $('#countryView').text(value['country']);
       $('#stateView').text(value['state']);
-      $('#view-image').attr('src',"<?php echo base_url()?>uploads/images/"+value['image']);
+      $('#nextGiftView').text(value['next_gift']);
+      $('#dateCancelledView').text(value['date_cancelled']);
+      $('#datePaidView').text(value['date_paid']);
+      $('#typeView').text(value['type']);
+      $('#roundsView').text(value['rounds']);
       $('#showViewModal').trigger('click');
 
    }
+
    function doneItem(id,type,status) {
         var items = [];
             items.push(id);
@@ -240,6 +304,7 @@ function showDetails(value) {
             return false;
         }
     }
+
 </script>
-</body>
+
 </html>
